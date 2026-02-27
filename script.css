@@ -1,0 +1,205 @@
+document.addEventListener("DOMContentLoaded", function () {
+
+  /* ================================
+     SLIDER TÉMOIGNAGES
+  ================================= */
+  function initTestimonialsSlider() {
+    const track = document.getElementById("testiTrack");
+    const cards = document.querySelectorAll(".testi-card");
+    const dotsContainer = document.getElementById("testiDots");
+
+    if (!track || cards.length === 0 || !dotsContainer) return;
+
+    const visible = 4;
+    const total = cards.length;
+    let index = 0;
+    const totalDots = total - visible + 1;
+
+    function getCardWidth() {
+      return cards[0].getBoundingClientRect().width + 24;
+    }
+
+    function goTo(i) {
+      index = i;
+      track.style.transform = `translateX(-${index * getCardWidth()}px)`;
+
+      document.querySelectorAll(".testi-dot").forEach((dot, dIndex) => {
+        dot.classList.toggle("active", dIndex === index);
+      });
+    }
+
+    // Création des dots
+    dotsContainer.innerHTML = "";
+    for (let i = 0; i < totalDots; i++) {
+      const dot = document.createElement("button");
+      dot.classList.add("testi-dot");
+      if (i === 0) dot.classList.add("active");
+      dot.addEventListener("click", () => goTo(i));
+      dotsContainer.appendChild(dot);
+    }
+
+    // Auto-slide
+    setInterval(() => {
+      index = index < totalDots - 1 ? index + 1 : 0;
+      goTo(index);
+    }, 3000);
+  }
+
+  initTestimonialsSlider();
+
+
+  /* ================================
+     SLIDER CAUSES
+  ================================= */
+  function initCausesSlider() {
+    const track = document.getElementById("causesTrack");
+    const cards = document.querySelectorAll(".cause-card");
+    const nextBtn = document.getElementById("nextBtn");
+    const prevBtn = document.getElementById("prevBtn");
+
+    if (!track || cards.length === 0) return;
+
+    const visible = 3;
+    const total = cards.length;
+    let index = 0;
+
+    function getWidth() {
+      return cards[0].getBoundingClientRect().width + 24;
+    }
+
+    function update() {
+      track.style.transform = `translateX(-${index * getWidth()}px)`;
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => {
+        index = index < total - visible ? index + 1 : 0;
+        update();
+      });
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        index = index > 0 ? index - 1 : total - visible;
+        update();
+      });
+    }
+
+    // Auto-slide
+    setInterval(() => {
+      index = index < total - visible ? index + 1 : 0;
+      update();
+    }, 3500);
+  }
+
+  initCausesSlider();
+
+
+  /* ================================
+     SLIDER BLOG
+  ================================= */
+  function initBlogSlider() {
+    const track = document.getElementById("blogTrack");
+    const cards = document.querySelectorAll(".blog-card");
+    const nextBtn = document.getElementById("blogNext");
+    const prevBtn = document.getElementById("blogPrev");
+
+    if (!track || cards.length === 0) return;
+
+    const visible = 3;
+    const total = cards.length;
+    let index = 0;
+
+    function getWidth() {
+      return cards[0].getBoundingClientRect().width + 24;
+    }
+
+    function update() {
+      track.style.transform = `translateX(-${index * getWidth()}px)`;
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => {
+        index = index < total - visible ? index + 1 : 0;
+        update();
+      });
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        index = index > 0 ? index - 1 : total - visible;
+        update();
+      });
+    }
+
+    setInterval(() => {
+      index = index < total - visible ? index + 1 : 0;
+      update();
+    }, 4000);
+  }
+
+  initBlogSlider();
+
+
+  /* ================================
+     ANIMATION TYPING
+  ================================= */
+  function animateTyping(selector, speed = 60) {
+    const el = document.querySelector(selector);
+    if (!el) return;
+
+    const text = el.textContent;
+    el.textContent = "";
+    let i = 0;
+
+    function type() {
+      if (i < text.length) {
+        el.textContent += text[i];
+        i++;
+        setTimeout(type, speed);
+      }
+    }
+
+    type();
+  }
+
+  animateTyping(".hero-left h1", 60);
+  animateTyping(".about-right h2", 40);
+  animateTyping(".team-header h2", 40);
+
+
+  /* ================================
+     BOUTONS MONTANT
+  ================================= */
+  window.selectAmount = function (btn, amount) {
+    document.querySelectorAll(".amount-btn").forEach(b =>
+      b.classList.remove("active")
+    );
+    btn.classList.add("active");
+
+    const input = document.getElementById("customAmount");
+    if (input) input.value = amount;
+  };
+
+
+  /* ================================
+     ACCORDION
+  ================================= */
+  window.toggleAccordion = function (header) {
+    const item = header.parentElement;
+    const allItems = document.querySelectorAll(".accordion-item");
+
+    allItems.forEach(i => {
+      i.classList.remove("active");
+      const icon = i.querySelector("i");
+      if (icon) icon.className = "fas fa-arrow-right";
+    });
+
+    if (!item.classList.contains("active")) {
+      item.classList.add("active");
+      const icon = header.querySelector("i");
+      if (icon) icon.className = "fas fa-arrow-down";
+    }
+  };
+
+});
